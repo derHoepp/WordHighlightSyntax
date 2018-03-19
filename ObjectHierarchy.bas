@@ -6,6 +6,7 @@ Option Explicit
 'Highlighter
  '| (BaseClass)
  '|-#CreateCharacterStyles
+ '|-#CreateCodeParagraphStyle
  '|-CodeSections
  '|  |#Add (CodeSection)
  '|  |-Count

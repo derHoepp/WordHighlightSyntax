@@ -1,0 +1,16 @@
+Following the documents contents for testing Purposes. The Character in Parentheses determines the Paragraphstyle. Either Normal/Standard (S) or Code(C). Please remove before testing and format the paragraph accordingly
+(S)Hier ist normaler Text, es folgt ein erster Codeblock
+(C)Dim myLine As Integer
+(C)For i = LBound(myArr) To UBound(myArr)
+(S)
+(S)Dann noch weiterer ganz normaler Text, bis wieder ein Codeblock kommt
+(C)With CreateObject("Scripting.FileSystemObject")
+(C)    Debug.Print .OpenTextFile("C:\Daten\MeineDatei").ReadAll
+(C)    Dim var As Variant
+(C)    var = Split(.OpenTextFile("C:\Daten\MeineDatei.txt").ReadAll,vbCrLf)
+(C)    For i = LBound(var) To Ubound(var)
+(C)        Debug.Print "Test" & var(i)
+(C)    Next i
+(C)End With
+(S)Und hier geht es normal weiter.
+(S)

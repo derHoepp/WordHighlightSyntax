@@ -73,7 +73,7 @@ Private Sub initKeyWordDict()
     Dim KWArray As Variant
     Dim KeyWordGroup As String
     Dim i As Long
-    KeyWordIni = CreateObject("Scripting.FilesystemObject").OpenTextfile("C:\Daten\VBA\VBA_Keywords.ini").ReadAll
+    KeyWordIni = CreateObject("Scripting.FilesystemObject").OpenTextfile("C:\Daten\GitRepos\WordHighlightSyntax\VBASyntax.ini").ReadAll
     KWArray = Split(KeyWordIni, vbCrLf)
     If Left(KeyWordIni, 1) = "[" Then
         For i = LBound(KWArray) To UBound(KWArray)

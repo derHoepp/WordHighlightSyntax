@@ -1,12 +1,16 @@
 Attribute VB_Name = "Tests"
 Option Explicit
 
-Sub Test_All()
-    Test_OneLineKeys
-    test_ParsingParagraph
+Sub TestAll()
+    TestOneLineKeys
+    'TestFormatingWithCertainDocumentStructure 'Currently wrong doc
+    'TestParsingParagraph 'Currently wrong doc
+    TestCreateCharStyles
+    TestParsingParagraphAndFormatting
+    
 End Sub
 
-Sub Test_OneLineKeys()
+Sub TestOneLineKeys()
     Dim myLine As New cLine
     Dim mySecondLine As New cLine
     myLine.ParseText "Dim myLine As Integer"
@@ -20,7 +24,8 @@ Sub Test_OneLineKeys()
     Debug.Assert mySecondLine.Keywords.item(4).Start = 26
 End Sub
 
-Sub Test_Formating()
+Sub TestFormatingWithCertainDocumentStructure()
+    'Current Document does no longer support this Test, as Paragraphs have moved
     Dim myFirstLine As New cLine
     Dim mySecondLine As New cLine
     Dim i As Long
@@ -44,7 +49,8 @@ Sub Test_Formating()
     Next i
 End Sub
 
-Sub test_ParsingParagraph()
+Sub TestParsingParagraph()
+    'Current Document does no longer support this Test, as Paragraphs have moved
     Dim myLine As New cLine
     myLine.ParseParagraph ThisDocument.StoryRanges(wdMainTextStory).Paragraphs(1)
     Debug.Assert myLine.Keywords.Count = 3
@@ -58,16 +64,19 @@ Sub test_ParsingParagraph()
     Debug.Assert myLine.Keywords.item(4).Start = 47
 End Sub
 
-Sub test_ParsingParagraphAndFormatting()
+Sub TestParsingParagraphAndFormatting()
     Dim myLine As New cLine
+    Dim pars As Variant
+    Dim j As Long
     Dim i As Long
     Dim er As ErrObject
+    pars = Array(2, 3, 6, 7, 8, 9, 10, 11, 12, 13)
     'First: Clear Formatting
     ThisDocument.StoryRanges(wdMainTextStory).Select
     On Error Resume Next
         Selection.ClearCharacterStyle 'Creates an Error if no characterstyle is set
         Set er = Err
-        If er.Number = 4605 Then
+        If er.Number = 4605 Or er.Number = 0 Then
             er.Clear
         Else
             Stop
@@ -75,19 +84,15 @@ Sub test_ParsingParagraphAndFormatting()
     On Error GoTo 0
     Selection.EndOf
     
-    myLine.ParseParagraph ThisDocument.StoryRanges(wdMainTextStory).Paragraphs(1)
-    For i = 1 To myLine.Keywords.Count
-        With myLine.Keywords.item(i)
-            .Range.Style = .KeywordType
-        End With
-    Next i
-    Set myLine = New cLine
-    myLine.ParseParagraph ThisDocument.StoryRanges(wdMainTextStory).Paragraphs(2)
-    For i = 1 To myLine.Keywords.Count
-        With myLine.Keywords.item(i)
-            .Range.Style = .KeywordType
-        End With
-    Next i
+    For j = LBound(pars) To UBound(pars)
+        Set myLine = New cLine
+        myLine.ParseParagraph ThisDocument.StoryRanges(wdMainTextStory).Paragraphs(pars(j))
+        For i = 1 To myLine.Keywords.Count
+            With myLine.Keywords.item(i)
+                .Range.Style = .KeywordType
+            End With
+        Next i
+    Next j
 End Sub
 
 Sub TestCreateCharStyles()
