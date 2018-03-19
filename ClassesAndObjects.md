@@ -2,8 +2,7 @@
 
 ## Objecthierarchy
 Public member and methods of the class-system. Subs are marked with a #.
-
-´´´
+```
 Highlighter
  | (BaseClass)
  |-#CreateCharacterStyles
@@ -36,4 +35,4 @@ Highlighter
  |  \-GetCategories (Variant())
  |-Document (Word.Document)
  \-#ParseDocument
-´´´
+```
