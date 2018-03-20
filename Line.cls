@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "cLine"
+Attribute VB_Name = "Line"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -11,19 +11,19 @@ Option Explicit
 
 Private mRawtext As String
 Private mKeywords As cKeywords
-Private mKeywordDict As Collection
+'Private mKeyWordDict As Collection 'Obsolete -> Centralized in Highlighter
 Private mParagraph As Paragraph
+Private mHighlighter As Highlighter
 
-Public Sub ParseParagraph(Para As Paragraph)
+Public Sub ParseParagraph(para As Paragraph)
     Dim wd As Range
     Dim tmpKeyWord As cKeyword
     Dim actCategory As String
     
-    initKeyWordDict
-    For Each wd In Para.Range.Words
+    For Each wd In para.Range.Words
         'The Range of a word includes spacecharacters.
         On Error Resume Next
-            actCategory = mKeywordDict.item(Replace(wd.Text, " ", ""))
+            actCategory = mHighlighter.KeyWordDictionary.Item(Replace(wd.Text, " ", ""))
         On Error GoTo 0
         If Not actCategory = vbNullString Then
             Set tmpKeyWord = New cKeyword
@@ -50,7 +50,7 @@ Public Sub ParseText(RawLine As String)
     myArr = Split(Replace(Replace(Replace(Replace(RawLine, "(", " "), ")", " "), vbCr, " "), vbLf, " "), Space(1))
     For i = LBound(myArr) To UBound(myArr)
         On Error Resume Next
-            actWord = mKeywordDict.item(myArr(i))
+            actWord = mKeyWordDict.Item(myArr(i))
         On Error GoTo 0
         If Not actWord = vbNullString Then
             Set tmpKeyWord = New cKeyword
@@ -69,27 +69,10 @@ Public Property Get Keywords() As cKeywords
 End Property
 
 Private Sub initKeyWordDict()
-    Dim KeyWordIni As String
-    Dim KWArray As Variant
-    Dim KeyWordGroup As String
-    Dim i As Long
-    KeyWordIni = CreateObject("Scripting.FilesystemObject").OpenTextfile("C:\Daten\GitRepos\WordHighlightSyntax\VBASyntax.ini").ReadAll
-    KWArray = Split(KeyWordIni, vbCrLf)
-    If Left(KeyWordIni, 1) = "[" Then
-        For i = LBound(KWArray) To UBound(KWArray)
-            If KWArray(i) Like "[[]*]" Then
-                KeyWordGroup = Mid(KWArray(i), 2, Len(KWArray(i)) - 2)
-            Else
-                mKeywordDict.Add KeyWordGroup, KWArray(i)
-            End If
-        Next i
-    Else
-        Err.Raise 9002, "initKeyWordDict", "No Ini-File"
-    End If
-    
+   'Obsolete -> Centralized in Highlighter
 End Sub
 
 Private Sub Class_Initialize()
     Set mKeywords = New cKeywords
-    Set mKeywordDict = New Collection
+    Set mKeyWordDict = New Collection
 End Sub

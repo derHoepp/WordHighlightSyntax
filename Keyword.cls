@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "cKeyword"
+Attribute VB_Name = "Keyword"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -12,43 +12,28 @@ Option Explicit
 Private mText As String
 Private mStart As Long
 Private mRange As Word.Range
-Private mKeywordType As String
+Private mCategory As String
 
-Public Property Let Tag(val As String)
-    mText = val
-End Property
-
-Public Property Get Tag() As String
+Public Property Get Text() As String
     Tag = mText
 End Property
 
-Public Property Let KeywordType(val As String)
-    mKeywordType = val
+Public Property Let Category(val As String)
+    mCategory = val
 End Property
-Public Property Get KeywordType() As String
-    KeywordType = mKeywordType
-End Property
-
-Public Property Let Start(val As Long)
-    mStart = val
-End Property
-
-Public Property Get Start() As Long
-    Start = mStart
-End Property
-
-Public Property Get Ende() As Long
-    Ende = Start + Len(mText)
+Public Property Get Category() As String
+    Category = mCategory
 End Property
 
 Public Property Get Range() As Range
     Set Range = mRange
-
 End Property
 
 Public Property Set Range(rng As Range)
     Set mRange = rng
     mText = Replace(mRange.Text, " ", "") 'The Range contains spaces, but shouldn't
-    mStart = mRange.Start
-    
 End Property
+
+Public Sub StyleKeyword()
+    mRange.Style = mCategory
+End Sub
